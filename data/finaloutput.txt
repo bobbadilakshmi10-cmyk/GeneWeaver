@@ -1,0 +1,435 @@
+Microsoft Windows [Version 10.0.26300.9550]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\bobba\Desktop\Flask_classwork>mkdir GeneWeaver
+
+C:\Users\bobba\Desktop\Flask_classwork>cd GeneWeaver
+
+C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>virtualenv GeneWeaver
+created virtual environment CPython3.14.0.final.0-64-x86_64 in 8471ms
+  creator CPython3Windows(dest=C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\GeneWeaver, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=C:\Users\bobba\AppData\Local\pypa\virtualenv\Cache)
+    added seed packages: pip==26.1.2
+  activators BashActivator,BatchActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+
+C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>.\GeneWeaver\Scripts\activate
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>pip install flask
+Collecting flask
+  Using cached flask-3.1.3-py3-none-any.whl.metadata (3.2 kB)
+Collecting blinker>=1.9.0 (from flask)
+  Using cached blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+Collecting click>=8.1.3 (from flask)
+  Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting itsdangerous>=2.2.0 (from flask)
+  Using cached itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+Collecting jinja2>=3.1.2 (from flask)
+  Using cached jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+Collecting markupsafe>=2.1.1 (from flask)
+  Downloading markupsafe-3.0.4-cp314-cp314-win_amd64.whl.metadata (2.8 kB)
+Collecting werkzeug>=3.1.0 (from flask)
+  Downloading werkzeug-3.1.9-py3-none-any.whl.metadata (4.1 kB)
+Using cached flask-3.1.3-py3-none-any.whl (103 kB)
+Using cached blinker-1.9.0-py3-none-any.whl (8.5 kB)
+Downloading click-8.5.0-py3-none-any.whl (125 kB)
+Using cached itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+Using cached jinja2-3.1.6-py3-none-any.whl (134 kB)
+Downloading markupsafe-3.0.4-cp314-cp314-win_amd64.whl (14 kB)
+Downloading werkzeug-3.1.9-py3-none-any.whl (228 kB)
+Installing collected packages: markupsafe, itsdangerous, click, blinker, werkzeug, jinja2, flask
+Successfully installed blinker-1.9.0 click-8.5.0 flask-3.1.3 itsdangerous-2.2.0 jinja2-3.1.6 markupsafe-3.0.4 werkzeug-3.1.9
+
+[notice] A new release of pip is available: 26.1.2 -> 26.2.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>code .
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>pip install -r requirements.txt
+
+[notice] A new release of pip is available: 26.1.2 -> 26.2.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+ERROR: Could not open requirements file: [Errno 2] No such file or directory: 'requirements.txt'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python -m pip install biopython numpy pytest
+Collecting biopython
+  Downloading biopython-1.88-cp314-cp314-win_amd64.whl.metadata (13 kB)
+Collecting numpy
+  Downloading numpy-2.5.3-cp314-cp314-win_amd64.whl.metadata (6.6 kB)
+Collecting pytest
+  Downloading pytest-9.1.1-py3-none-any.whl.metadata (7.6 kB)
+Collecting colorama>=0.4 (from pytest)
+  Using cached colorama-0.4.6-py2.py3-none-any.whl.metadata (17 kB)
+Collecting iniconfig>=1.0.1 (from pytest)
+  Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+Collecting packaging>=22 (from pytest)
+  Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting pluggy<2,>=1.5 (from pytest)
+  Downloading pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Collecting pygments>=2.7.2 (from pytest)
+  Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Downloading biopython-1.88-cp314-cp314-win_amd64.whl (2.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.7/2.7 MB 2.7 MB/s  0:00:01
+Downloading numpy-2.5.3-cp314-cp314-win_amd64.whl (12.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.7/12.7 MB 1.8 MB/s  0:00:07
+Downloading pytest-9.1.1-py3-none-any.whl (386 kB)
+Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+Using cached colorama-0.4.6-py2.py3-none-any.whl (25 kB)
+Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+Downloading packaging-26.3-py3-none-any.whl (129 kB)
+Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 2.1 MB/s  0:00:00
+Installing collected packages: pygments, pluggy, packaging, numpy, iniconfig, colorama, pytest, biopython
+Successfully installed biopython-1.88 colorama-0.4.6 iniconfig-2.3.1 numpy-2.5.3 packaging-26.3 pluggy-1.6.0 pygments-2.21.0 pytest-9.1.1
+
+[notice] A new release of pip is available: 26.1.2 -> 26.2.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python -m pip show biopython numpy pytest
+Name: biopython
+Version: 1.88
+Summary: Freely available tools for computational molecular biology.
+Home-page: https://biopython.org/
+Author:
+Author-email: The Biopython Contributors <biopython@biopython.org>
+License-Expression: LicenseRef-Biopython-License-Agreement
+Location: C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\GeneWeaver\Lib\site-packages
+Requires: numpy
+Required-by:
+---
+Name: numpy
+Version: 2.5.3
+Summary: Fundamental package for array computing in Python
+Home-page: https://numpy.org
+Author: Travis E. Oliphant et al.
+Author-email:
+License-Expression: BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0
+Location: C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\GeneWeaver\Lib\site-packages
+Requires:
+Required-by: biopython
+---
+Name: pytest
+Version: 9.1.1
+Summary: pytest: simple powerful testing with Python
+Home-page: https://docs.pytest.org/en/latest/
+Author: Brianna Laugher, Bruno Oliveira, Floris Bruynooghe, Freya Bruhin, Holger Krekel, Others (See AUTHORS), Ronny Pfannschmidt
+Author-email:
+License-Expression: MIT
+Location: C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\GeneWeaver\Lib\site-packages
+Requires: colorama, iniconfig, packaging, pluggy, pygments
+Required-by:
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python -c "import Bio, numpy, pytest; print('All libraries installed successfully!')"
+All libraries installed successfully!
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python app.py
+python: can't open file 'C:\\Users\\bobba\\Desktop\\Flask_classwork\\GeneWeaver\\app.py': [Errno 2] No such file or directory
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python app.py
+python: can't open file 'C:\\Users\\bobba\\Desktop\\Flask_classwork\\GeneWeaver\\app.py': [Errno 2] No such file or directory
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+python: can't open file 'C:\\Users\\bobba\\Desktop\\Flask_classwork\\GeneWeaver\\main.py': [Errno 2] No such file or directory
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+python: can't open file 'C:\\Users\\bobba\\Desktop\\Flask_classwork\\GeneWeaver\\main.py': [Errno 2] No such file or directory
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+python: can't open file 'C:\\Users\\bobba\\Desktop\\Flask_classwork\\GeneWeaver\\main.py': [Errno 2] No such file or directory
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>cd
+C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>dir /s /b main.py
+C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\GeneWeaver\main.py
+C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\GeneWeaver\Lib\site-packages\pip\_internal\main.py
+C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\GeneWeaver\Lib\site-packages\pip\_internal\cli\main.py
+C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\GeneWeaver\Lib\site-packages\_pytest\main.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+python: can't open file 'C:\\Users\\bobba\\Desktop\\Flask_classwork\\GeneWeaver\\main.py': [Errno 2] No such file or directory
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>echo print("GeneWeaver started successfully") > main.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>dir main.py
+ Volume in drive C is Windows
+ Volume Serial Number is 3AFB-8EC9
+
+ Directory of C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver
+
+10-10-2026  19:17                43 main.py
+               1 File(s)             43 bytes
+               0 Dir(s)  362,890,129,408 bytes free
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+GeneWeaver started successfully
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>notepad main.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+GeneWeaver started successfully
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+GeneWeaver started successfully
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>notepad main.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 2, in <module>
+    from member1.fasta_pipeline import prepare_data
+ModuleNotFoundError: No module named 'member1'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>mkdir member1
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>type nul > member1\__init__.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>notepad member1\fasta_pipeline.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>mkdir member1
+A subdirectory or file member1 already exists.
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>type nul > member1\__init__.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>notepad member1\fasta_pipeline.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 7, in <module>
+    records = prepare_data(filename, chunk_size=5)
+TypeError: prepare_data() got an unexpected keyword argument 'chunk_size'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 7, in <module>
+    records = prepare_data(filename, chunk_size=5)
+TypeError: prepare_data() got an unexpected keyword argument 'chunk_size'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 7, in <module>
+    records = prepare_data(filename, chunk_size=5)
+TypeError: prepare_data() got an unexpected keyword argument 'chunk_size'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 7, in <module>
+    records = prepare_data(filename, chunk_size=5)
+TypeError: prepare_data() got an unexpected keyword argument 'chunk_size'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python -c "from member1.fasta_pipeline import prepare_data; import inspect; print(inspect.signature(prepare_data)); print(inspect.getfile(prepare_data))"
+(file_path)
+C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\member1\fasta_pipeline.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 7, in <module>
+    records = prepare_data(filename, chunk_size=5)
+TypeError: prepare_data() got an unexpected keyword argument 'chunk_size'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python -c "from member1.fasta_pipeline import prepare_data; import inspect; print(inspect.signature(prepare_data)); print(inspect.getfile(prepare_data))"
+(file_path)
+C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\member1\fasta_pipeline.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python -c "from member1.fasta_pipeline import prepare_data; import inspect; print(inspect.signature(prepare_data))"
+(file_path)
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 7, in <module>
+    records = prepare_data(filename, chunk_size=5)
+TypeError: prepare_data() got an unexpected keyword argument 'chunk_size'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>notepad C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\member1\fasta_pipeline.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>type member1\fasta_pipeline.py
+
+def prepare_data(file_path, chunk_size=5):
+    sequences = []
+
+    with open(file_path, "r") as file:
+        for line in file:
+            line = line.strip()
+
+            if line and not line.startswith(">"):
+                sequences.append(line.upper())
+
+    dna_sequence = "".join(sequences)
+
+    chunks = []
+    for i in range(0, len(dna_sequence), chunk_size):
+        chunks.append(dna_sequence[i:i + chunk_size])
+
+    return chunks
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python -c "import member1.fasta_pipeline as f; import inspect; print(inspect.signature(f.prepare_data)); print(inspect.getsource(f.prepare_data))"
+(file_path, chunk_size=5)
+def prepare_data(file_path, chunk_size=5):
+    sequences = []
+
+    with open(file_path, "r") as file:
+        for line in file:
+            line = line.strip()
+
+            if line and not line.startswith(">"):
+                sequences.append(line.upper())
+
+    dna_sequence = "".join(sequences)
+
+    chunks = []
+    for i in range(0, len(dna_sequence), chunk_size):
+        chunks.append(dna_sequence[i:i + chunk_size])
+
+    return chunks
+
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Error: [Errno 2] No such file or directory: 'data/sample.fasta'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Error: [Errno 2] No such file or directory: 'data/sample.fasta'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>mkdir data
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>notepad data\sample.fasta
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 10, in <module>
+    print("DNA ID:", record["id"])
+                     ~~~~~~^^^^^^
+TypeError: string indices must be integers, not 'str'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 10, in <module>
+    print("DNA ID:", record["id"])
+                     ~~~~~~^^^^^^
+TypeError: string indices must be integers, not 'str'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 10, in <module>
+    print("DNA ID:", record["id"])
+                     ~~~~~~^^^^^^
+TypeError: string indices must be integers, not 'str'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python -c "from member1.fasta_pipeline import prepare_data; x=prepare_data('data/sample.fasta', chunk_size=5); print(type(x)); print(type(x[0])); print(repr(x[0]))"
+<class 'list'>
+<class 'str'>
+'ATGCG'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>type member1\fasta_pipeline.py
+
+def prepare_data(file_path, chunk_size=5):
+    sequences = []
+
+    with open(file_path, "r") as file:
+        for line in file:
+            line = line.strip()
+
+            if line and not line.startswith(">"):
+                sequences.append(line.upper())
+
+    dna_sequence = "".join(sequences)
+
+    chunks = []
+    for i in range(0, len(dna_sequence), chunk_size):
+        chunks.append(dna_sequence[i:i + chunk_size])
+
+    return chunks
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 10, in <module>
+    print("DNA ID:", record["id"])
+                     ~~~~~~^^^^^^
+TypeError: string indices must be integers, not 'str'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 10, in <module>
+    print("DNA ID:", record["id"])
+                     ~~~~~~^^^^^^
+TypeError: string indices must be integers, not 'str'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 10, in <module>
+    print("DNA ID:", record["id"])
+                     ~~~~~~^^^^^^
+TypeError: string indices must be integers, not 'str'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>main.py
+Traceback (most recent call last):
+  File "C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver\main.py", line 10, in <module>
+    print("DNA ID:", record["id"])
+                     ~~~~~~^^^^^^
+TypeError: string indices must be integers, not 'str'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>notepad main.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+GeneWeaver started successfully
+Record: 'ATGCG'
+Record: 'TACGT'
+Record: 'AGCTA'
+Record: 'GCTAG'
+Record: 'GCTAA'
+Record: 'CGTGC'
+Record: 'TAGCT'
+Record: 'AGCAT'
+Record: 'CGATC'
+Record: 'GATCG'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+GeneWeaver started successfully
+Record: 'ATGCG'
+Record: 'TACGT'
+Record: 'AGCTA'
+Record: 'GCTAG'
+Record: 'GCTAA'
+Record: 'CGTGC'
+Record: 'TAGCT'
+Record: 'AGCAT'
+Record: 'CGATC'
+Record: 'GATCG'
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>notepad member1\fasta_pipeline.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>notepad main.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
+GeneWeaver started successfully
+DNA ID: sequence_1
+DNA Sequence: ATGCG
+DNA ID: sequence_1
+DNA Sequence: TACGT
+DNA ID: sequence_1
+DNA Sequence: AGCTA
+DNA ID: sequence_1
+DNA Sequence: GCTAG
+DNA ID: sequence_1
+DNA Sequence: GCTAA
+DNA ID: sequence_1
+DNA Sequence: CGT
+DNA ID: sequence_2
+DNA Sequence: GCTAG
+DNA ID: sequence_2
+DNA Sequence: CTAGC
+DNA ID: sequence_2
+DNA Sequence: ATCGA
+DNA ID: sequence_2
+DNA Sequence: TCGAT
+DNA ID: sequence_2
+DNA Sequence: CG
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python test_pipeline.py
+python: can't open file 'C:\\Users\\bobba\\Desktop\\Flask_classwork\\GeneWeaver\\test_pipeline.py': [Errno 2] No such file or directory
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>notepad test_pipeline.py
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python test_pipeline.py
+All pipeline tests passed!
+Total DNA chunks: 11
+
+(GeneWeaver) C:\Users\bobba\Desktop\Flask_classwork\GeneWeaver>python main.py
