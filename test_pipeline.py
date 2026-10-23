@@ -1,4 +1,4 @@
-```python
+
 # Import Path to handle file paths
 from pathlib import Path
 
