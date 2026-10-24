@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeneWeaver DNA Scanner</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f4f7fb;
+            color: #243247;
+        }
+
+        h1 {
+            color: #176b56;
+        }
+
+        .panel {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px #00000010;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input, button {
+            margin-top: 8px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+        }
+
+        button {
+            background: #176b56;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 12px 20px;
+        }
+
+        #message {
+            margin-top: 15px;
+            overflow-wrap: anywhere;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #176b56;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>GeneWeaver DNA Scanner</h1>
+    <p>Upload a FASTA file and scan for target DNA matches.</p>
+
+    <div class="panel">
+        <form id="scanForm">
+            <label for="target">Target DNA sequence</label>
+            <input id="target" name="target" type="text"
+                   value="ACGT" required>
+
+            <label for="fasta_file">Upload FASTA file</label>
+            <input id="fasta_file" name="fasta_file"
+                   type="file" accept=".fa,.fasta,.fna" required>
+
+            <label for="max_mismatches">Maximum mismatches</label>
+            <input id="max_mismatches" name="max_mismatches"
+                   type="number" value="3" min="0" required>
+
+            <label for="step">Scan step</label>
+            <input id="step" name="step"
+                   type="number" value="1" min="1" required>
+
+            <button type="submit" id="scanButton">Scan DNA</button>
+        </form>
+
+        <p id="message" role="status"></p>
+    </div>
+
+    <div class="panel">
+        <h2>Scan Results</h2>
+        <p id="summary">Upload a FASTA file to begin.</p>
+
+        <div class="table-container">
+            <table id="resultsTable">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("scanForm");
+        const message = document.getElementById("message");
+        const summary = document.getElementById("summary");
+        const button = document.getElementById("scanButton");
+        const tableHead = document.querySelector("#resultsTable thead");
+        const tableBody = document.querySelector("#resultsTable tbody");
+
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            message.textContent = "Scanning DNA. Please wait...";
+            summary.textContent = "";
+            tableHead.replaceChildren();
+            tableBody.replaceChildren();
+            button.disabled = true;
+
+            try {
+                const formData = new FormData(form);
+
+                const response = await fetch("/api/analyze", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || "DNA scan failed.");
+                }
+
+                message.textContent = data.message;
+                summary.textContent =
+                    "Sequences scanned: " + data.sequence_count +
+                    " | Total matches: " + data.results_count;
+
+                if (!data.results || data.results.length === 0) {
+                    tableBody.innerHTML =
+                        '<tr><td>No matching DNA regions found.</td></tr>';
+                    return;
+                }
+
+                const columns = Object.keys(data.results[0]);
+
+                const headerRow = document.createElement("tr");
+
+                columns.forEach(function (column) {
+                    const th = document.createElement("th");
+                    th.textContent = column;
+                    headerRow.appendChild(th);
+                });
+
+                tableHead.appendChild(headerRow);
+
+                data.results.forEach(function (result) {
+                    const row = document.createElement("tr");
+
+                    columns.forEach(function (column) {
+                        const cell = document.createElement("td");
+                        const value = result[column];
+
+                        cell.textContent =
+                            value === null || value === undefined
+                                ? ""
+                                : typeof value === "object"
+                                    ? JSON.stringify(value)
+                                    : String(value);
+
+                        row.appendChild(cell);
+                    });
+
+                    tableBody.appendChild(row);
+                });
+
+                if (data.results_count > data.results.length) {
+                    message.textContent +=
+                        " Showing the first " + data.results.length +
+                        " results.";
+                }
+
+            } catch (error) {
+                message.textContent = "Error: " + error.message;
+            } finally {
+                button.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
