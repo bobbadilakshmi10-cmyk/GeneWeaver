@@ -10,6 +10,11 @@
 
     <!-- Set the browser tab title -->
     <title>"GeneWeaver": GPU-Accelerated CRISPR Alignment Engine </title>
+    
+
+<!-- Browser tab icon -->
+<link rel="icon" type="images.jpg"
+      href="{{ url_for('static', filename='images.jpg') }}">
 
     <!-- CSS styles for the webpage -->
     <style>
@@ -19,13 +24,13 @@
             max-width: 1000px;
             margin: 30px auto;
             padding: 20px;
-            background: #f4f7fb;
+            background: blue;
             color: #243247;
         }
 
         /* Style the main heading */
         h1 {
-            color: #176b56;
+            color: #c91426;
         }
 
         /* Style the form and results panels */
@@ -63,7 +68,7 @@
             background: #176b56;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
             padding: 12px 20px;
         }
@@ -103,8 +108,10 @@
 
 <body>
     <!-- Display the project title and introduction -->
-    <center><h1>"GeneWeaver": GPU-Accelerated CRISPR Alignment Engine </h1>
-    <p>Upload a FASTA file and scan for target DNA matches.</p></center>
+    <center><h1>"GeneWeaver": GPU-Accelerated CRISPR Alignment Engine </h1></center>
+    <marquee behavior="scroll" direction="right" scrollamount="4">
+    <p>Upload a FASTA file and scan for target DNA matches.</p>
+</marquee>
 
     <!-- Panel containing the DNA scanning form -->
     <div class="panel">
