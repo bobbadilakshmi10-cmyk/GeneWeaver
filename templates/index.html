@@ -3,112 +3,284 @@
 <html lang="en">
 
 <head>
-    <!-- Define character encoding -->
     <meta charset="UTF-8">
-
-    <!-- Make webpage responsive on all devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Browser tab title -->
     <title>GeneWeaver: GPU-Accelerated CRISPR Alignment Engine</title>
 
-    <!-- Add browser tab favicon -->
     <link rel="icon" type="image/jpeg"
           href="{{ url_for('static', filename='images.jpg') }}">
 
-    <!-- Internal CSS styling -->
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
     <style>
 
-        /* Apply basic styling to the complete webpage */
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 20px;
-            background: #1ed418;
-            color: #243247;
-        }
-
-        /* Style the main project heading */
-        h1 {
-            color: #c91426;
-        }
-
-        /* Create white panels for form and results */
-        .panel {
-            background: white;
-            padding: 24px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px #00000010;
-        }
-
-        /* Display labels above input fields */
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        /* Add spacing inside input fields and buttons */
-        input, button {
-            margin-top: 8px;
-            padding: 10px;
+        /* General page styling */
+        * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
-        /* Make text, number and file inputs full width */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #071c2c, #123e50, #087f70);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 35px 15px;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1050px;
+        }
+
+        /* Header section */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            text-shadow: 0 3px 12px #00000050;
+        }
+
+        .header h1 span {
+            color: #46e6b2;
+        }
+
+        .header p {
+            color: #c6e9e5;
+            font-size: 16px;
+        }
+
+        /* Animated introduction */
+        .marquee-box {
+            overflow: hidden;
+            white-space: nowrap;
+            background: #ffffff15;
+            border: 1px solid #ffffff30;
+            border-radius: 10px;
+            padding: 13px;
+            margin-bottom: 25px;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            color: #75f5ca;
+            font-size: 15px;
+            font-weight: 600;
+            padding-left: 100%;
+            animation: scrolling 18s linear infinite;
+        }
+
+        @keyframes scrolling {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Main panels */
+        .panel {
+            background: #ffffff;
+            color: #263746;
+            padding: 30px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 12px 35px #00000030;
+            transition: transform 0.3s ease;
+        }
+
+        .panel:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Panel headings */
+        .panel h2 {
+            color: #087f70;
+            font-size: 23px;
+            font-weight: 750;
+            margin-bottom: 22px;
+            border-bottom: 2px solid #e0f2ed;
+            padding-bottom: 12px;
+        }
+
+        /* Form labels */
+        label {
+            display: block;
+            font-weight: 650;
+            margin-bottom: 9px;
+            margin-top: 18px;
+            color: #263746;
+        }
+
+        /* Input fields */
         input[type="text"],
         input[type="number"],
         input[type="file"] {
             width: 100%;
+            padding: 13px;
+            border: 1px solid #ccd9df;
+            border-radius: 9px;
+            background: #f8fbfc;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
         }
 
-        /* Style the DNA scanning button */
+        input:focus {
+            border-color: #07977d;
+            box-shadow: 0 0 0 4px #07977d20;
+            background: #ffffff;
+        }
+
+        input[type="file"] {
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #e0f5ef;
+            color: #087f70;
+            border: none;
+            padding: 9px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        /* Scan button */
         button {
-            background: #176b56;
-            color: white;
+            width: 100%;
+            margin-top: 28px;
+            padding: 14px;
+            background: linear-gradient(135deg, #087f70, #12ad88);
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 700;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            padding: 12px 20px;
+            transition: all 0.3s ease;
         }
 
-        /* Change button appearance while disabled */
+        button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #06685c, #079b77);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px #087f7040;
+        }
+
         button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
         }
 
-        /* Style scanning status and error messages */
+        /* Status messages */
         #message {
-            margin-top: 15px;
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+            color: #087f70;
+        }
+
+        /* Results summary */
+        #summary {
+            background: #e8f7f2;
+            color: #087f70;
+            padding: 14px;
+            border-radius: 9px;
+            font-weight: 650;
+            margin-bottom: 20px;
             overflow-wrap: anywhere;
         }
 
-        /* Allow horizontal scrolling for wide results tables */
+        /* Results table container */
         .table-container {
-            overflow-x: auto;
-        }
-
-        /* Style the DNA results table */
-        table {
-            border-collapse: collapse;
             width: 100%;
-            background: white;
+            overflow-x: auto;
+            border-radius: 10px;
         }
 
-        /* Style table headings and data cells */
+        /* Results table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            min-width: 500px;
+        }
+
         th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
+            padding: 13px;
+            border: 1px solid #e0e7eb;
             text-align: left;
+            font-size: 14px;
         }
 
-        /* Give table headings a colored background */
         th {
-            background: #176b56;
-            color: white;
+            background: #087f70;
+            color: #ffffff;
+            text-transform: capitalize;
+            font-weight: 700;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f0faf7;
+        }
+
+        tbody tr:hover {
+            background: #dff5ed;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: #c6e9e5;
+            font-size: 13px;
+            margin-top: 25px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+
+            body {
+                padding: 20px 10px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .panel {
+                padding: 20px;
+            }
+
+            .panel h2 {
+                font-size: 20px;
+            }
+
+            .marquee-text {
+                font-size: 13px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
         }
 
     </style>
@@ -116,226 +288,270 @@
 
 <body>
 
-    <!-- Display the GeneWeaver project heading -->
-    <center>
-        <h1>GeneWeaver: GPU-Accelerated CRISPR Alignment Engine</h1>
-    </center>
+    <div class="container">
 
-    <!-- Display a scrolling project introduction -->
-    <marquee behavior="scroll" direction="right" scrollamount="4">
-        <p>Upload a FASTA file and scan for target DNA matches.</p>
-    </marquee>
+        <!-- Project Header -->
+        <div class="header">
 
-    <!-- Main DNA scanning form panel -->
-    <div class="panel">
+            <h1>
+                🧬 Gene<span>Weaver</span>
+            </h1>
 
-        <!-- Form used to collect DNA scanning information -->
-        <form id="scanForm">
+            <p>
+                GPU-Accelerated CRISPR Alignment Engine
+            </p>
 
-            <!-- Input field for target DNA sequence -->
-            <label for="target">Target DNA Sequence</label>
+        </div>
 
-            <!-- Default target DNA sequence is ACGT -->
-            <input id="target" name="target"
-                   type="text" value="ACGT" required>
+        <!-- Scrolling Introduction -->
+        <div class="marquee-box">
 
-            <!-- File upload section for FASTA files -->
-            <label for="fasta_file">Upload FASTA File</label>
+            <div class="marquee-text">
+                Upload your FASTA file and scan DNA sequences
+                to identify target matches using GeneWeaver.
+            </div>
 
-            <!-- Accept FASTA file extensions -->
-            <input id="fasta_file" name="fasta_file"
-                   type="file" accept=".fa,.fasta,.fna" required>
+        </div>
 
-            <!-- Set the maximum number of allowed mismatches -->
-            <label for="max_mismatches">Maximum Mismatches</label>
+        <!-- DNA Scanning Form -->
+        <div class="panel">
 
-            <!-- Default maximum mismatch value is 3 -->
-            <input id="max_mismatches" name="max_mismatches"
-                   type="number" value="3" min="0" required>
+            <h2>🧪 DNA Sequence Analysis</h2>
 
-            <!-- Set the scanning step size -->
-            <label for="step">Scan Step</label>
+            <form id="scanForm">
 
-            <!-- Default scanning step is 1 -->
-            <input id="step" name="step"
-                   type="number" value="1" min="1" required>
+                <!-- Target DNA -->
+                <label for="target">
+                    Target DNA Sequence
+                </label>
 
-            <!-- Button to submit DNA scanning request -->
-            <button type="submit" id="scanButton">
-                Scan DNA
-            </button>
+                <input
+                    id="target"
+                    name="target"
+                    type="text"
+                    value="ACGT"
+                    placeholder="Enter target DNA sequence"
+                    required
+                >
 
-        </form>
+                <!-- FASTA Upload -->
+                <label for="fasta_file">
+                    📁 Upload FASTA File
+                </label>
 
-        <!-- Display scanning status and error messages -->
-        <p id="message" role="status"></p>
+                <input
+                    id="fasta_file"
+                    name="fasta_file"
+                    type="file"
+                    accept=".fa,.fasta,.fna"
+                    required
+                >
 
-    </div>
+                <!-- Maximum Mismatches -->
+                <label for="max_mismatches">
+                    Maximum Mismatches
+                </label>
 
-    <!-- Panel for displaying DNA scanning results -->
-    <div class="panel">
+                <input
+                    id="max_mismatches"
+                    name="max_mismatches"
+                    type="number"
+                    value="3"
+                    min="0"
+                    required
+                >
 
-        <!-- Results section heading -->
-        <h2>Scan Results</h2>
+                <!-- Scan Step -->
+                <label for="step">
+                    Scan Step
+                </label>
 
-        <!-- Display total sequences scanned and matches found -->
-        <p id="summary">Upload a FASTA file to begin.</p>
+                <input
+                    id="step"
+                    name="step"
+                    type="number"
+                    value="1"
+                    min="1"
+                    required
+                >
 
-        <!-- Container makes the results table responsive -->
-        <div class="table-container">
+                <!-- Scan Button -->
+                <button type="submit" id="scanButton">
+                    🔍 Scan DNA
+                </button>
 
-            <!-- Table used to display matching DNA regions -->
-            <table id="resultsTable">
+            </form>
 
-                <!-- JavaScript dynamically creates table headings -->
-                <thead></thead>
+            <!-- Status Message -->
+            <p id="message" role="status" aria-live="polite"></p>
 
-                <!-- JavaScript dynamically inserts result rows -->
-                <tbody></tbody>
+        </div>
 
-            </table>
+        <!-- Results Panel -->
+        <div class="panel">
+
+            <h2>📊 Scan Results</h2>
+
+            <!-- Results Summary -->
+            <p id="summary">
+                Upload a FASTA file to begin DNA analysis.
+            </p>
+
+            <!-- Results Table -->
+            <div class="table-container">
+
+                <table id="resultsTable">
+
+                    <thead></thead>
+
+                    <tbody></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+
+            <p>
+                © 2026 GeneWeaver |
+                GPU-Accelerated CRISPR Alignment Engine
+            </p>
 
         </div>
 
     </div>
 
-    <!-- JavaScript controls form submission and results display -->
+
+    <!-- JavaScript -->
     <script>
 
-        // Get the DNA scanning form element
+        // Get HTML elements
         const form = document.getElementById("scanForm");
 
-        // Get the status message element
         const message = document.getElementById("message");
 
-        // Get the results summary element
         const summary = document.getElementById("summary");
 
-        // Get the scan button element
         const button = document.getElementById("scanButton");
 
-        // Get the table heading section
         const tableHead =
             document.querySelector("#resultsTable thead");
 
-        // Get the table body section
         const tableBody =
             document.querySelector("#resultsTable tbody");
 
-        // Listen for the form submission event
+
+        // Handle form submission
         form.addEventListener("submit", async function(event) {
 
-            // Prevent the browser from reloading the page
+            // Prevent page reload
             event.preventDefault();
 
-            // Display a message while DNA scanning is running
+            // Show scanning message
             message.textContent = "Scanning DNA. Please wait...";
 
-            // Clear previous scanning summary
-            summary.textContent = "";
+            summary.textContent = "Processing DNA sequences...";
 
-            // Remove previous table headings
+            // Clear previous results
             tableHead.replaceChildren();
 
-            // Remove previous table rows
             tableBody.replaceChildren();
 
-            // Disable the button to prevent multiple submissions
+            // Disable button
             button.disabled = true;
+
+            button.textContent = "⏳ Scanning...";
+
 
             try {
 
-                // Collect all form inputs and uploaded file
+                // Collect form data
                 const formData = new FormData(form);
 
-                // Send the form data to the Flask backend
+                // Send data to Flask backend
                 const response = await fetch("/api/analyze", {
+
                     method: "POST",
+
                     body: formData
+
                 });
 
-                // Convert the Flask response into JSON format
+                // Convert response to JSON
                 const data = await response.json();
 
-                // Check whether the backend returned an error
+                // Check for backend errors
                 if (!response.ok) {
 
-                    // Display the error returned by Flask
                     throw new Error(
                         data.error || "DNA scan failed."
                     );
+
                 }
 
-                // Display the success message from Flask
+                // Display success message
                 message.textContent = data.message;
 
-                // Display total sequences and matching results
+                // Display summary
                 summary.textContent =
                     "Sequences scanned: " + data.sequence_count +
                     " | Total matches: " + data.results_count;
 
-                // Check whether any DNA matches were found
+
+                // Check for empty results
                 if (!data.results || data.results.length === 0) {
 
-                    // Create an empty table row
                     const row = document.createElement("tr");
 
-                    // Create a table cell
                     const cell = document.createElement("td");
 
-                    // Display the no-match message
                     cell.textContent =
                         "No matching DNA regions found.";
 
-                    // Add the cell to the row
+                    cell.colSpan = 1;
+
                     row.appendChild(cell);
 
-                    // Add the row to the results table
                     tableBody.appendChild(row);
 
-                    // Stop further processing
                     return;
+
                 }
 
-                // Get column names from the first result object
+
+                // Get column names
                 const columns = Object.keys(data.results[0]);
 
-                // Create a new table heading row
+                // Create table heading
                 const headerRow = document.createElement("tr");
 
-                // Loop through all result column names
                 columns.forEach(function(column) {
 
-                    // Create a table heading element
                     const th = document.createElement("th");
 
-                    // Set the column name as heading text
                     th.textContent = column;
 
-                    // Add the heading to the header row
                     headerRow.appendChild(th);
 
                 });
 
-                // Insert the completed heading row into the table
                 tableHead.appendChild(headerRow);
 
-                // Loop through every DNA matching result
+
+                // Display DNA results
                 data.results.forEach(function(result) {
 
-                    // Create a new table row
                     const row = document.createElement("tr");
 
-                    // Loop through each column in the result
                     columns.forEach(function(column) {
 
-                        // Create a new table data cell
                         const cell = document.createElement("td");
 
-                        // Get the current column value
                         const value = result[column];
 
-                        // Convert the result value into readable text
                         cell.textContent =
                             value === null || value === undefined
                                 ? ""
@@ -343,36 +559,40 @@
                                     ? JSON.stringify(value)
                                     : String(value);
 
-                        // Add the cell to the current row
                         row.appendChild(cell);
 
                     });
 
-                    // Add the completed row to the results table
                     tableBody.appendChild(row);
 
                 });
 
-                // Check whether the backend returned more results
-                // than the number currently displayed
+
+                // Display additional results information
                 if (data.results_count > data.results.length) {
 
-                    // Inform the user that only some results are shown
                     message.textContent +=
                         " Showing the first " +
                         data.results.length + " results.";
 
                 }
 
+
             } catch(error) {
 
-                // Display any error that occurs during scanning
-                message.textContent = "Error: " + error.message;
+                // Display error
+                message.textContent =
+                    "Error: " + error.message;
+
+                summary.textContent =
+                    "DNA analysis could not be completed.";
 
             } finally {
 
-                // Re-enable the scan button after processing
+                // Enable button again
                 button.disabled = false;
+
+                button.textContent = "🔍 Scan DNA";
 
             }
 
