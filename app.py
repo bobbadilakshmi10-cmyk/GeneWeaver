@@ -1,197 +1,228 @@
+# ============================================================
+# GENEWEAVER - FLASK APPLICATION
+# This file handles the web interface, FASTA file processing,
+# DNA sequence validation, and DNA target sequence analysis.
+# ============================================================
 
-# Import Path to work with file and folder paths.
+
+# Import Path to work with project file and folder locations.
 from pathlib import Path
 
-# Import StringIO to treat a string as a file for FASTA parsing.
+# Import StringIO to convert text into a file-like object.
+# This allows BioPython to read uploaded FASTA text.
 from io import StringIO
 
-# Import Flask functions to create the application, handle requests,
-# return JSON responses, and display HTML templates.
+# Import Flask components:
+# Flask          -> Creates the web application.
+# jsonify        -> Sends data as JSON responses.
+# render_template -> Displays HTML pages.
+# request        -> Receives files and form data from the user.
 from flask import Flask, jsonify, render_template, request
 
-# Import BioPython's SeqIO module to read FASTA DNA sequence files.
+# Import BioPython's SeqIO module to parse FASTA files.
 from Bio import SeqIO
 
-# Import the function that cleans and validates DNA sequences.
+# Import the custom function that cleans DNA sequences.
 from member1.fasta_pipeline import clean_dna
 
-# Import the function that scans DNA sequences for target matches.
+# Import the function that scans sequences and finds
+# matches based on the target and allowed mismatches.
 from analysis.scoring import scan_sequences
 
 
-# --------------------------------------------------
-# 1. INITIALIZE THE FLASK APPLICATION
-# --------------------------------------------------
+# ============================================================
+# 1. FLASK APPLICATION CONFIGURATION
+# ============================================================
 
-# Create the Flask application instance.
+# Create the main Flask application object.
 app = Flask(__name__)
 
-# Get the absolute path of the current project directory.
+# Find the absolute path of the folder containing this app.py file.
 BASE_DIR = Path(__file__).resolve().parent
 
-# Define the folder used to store project data.
+# Define the project's data folder.
+# This can be used to store DNA or project-related data files.
 UPLOAD_FOLDER = BASE_DIR / "data"
 
-# Set the maximum allowed request size to 5 MB.
+# Limit the maximum request/upload size to 5 MB.
+# This prevents very large files from being uploaded.
 app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 
 
-# --------------------------------------------------
+# ============================================================
 # 2. HOME PAGE ROUTE
-# --------------------------------------------------
+# ============================================================
 
+# When the user opens the main website URL (/),
+# this function displays the GeneWeaver web page.
 @app.route("/")
 def home():
-    """Display the GeneWeaver frontend."""
+    """Display the GeneWeaver home page."""
 
     # Load index.html from the templates folder.
     return render_template("index.html")
 
 
-# --------------------------------------------------
-# 3. HEALTH CHECK API
-# --------------------------------------------------
+# ============================================================
+# 3. APPLICATION HEALTH CHECK API
+# ============================================================
 
+# This API checks whether the Flask application is running properly.
 @app.route("/api/health")
 def health():
-    """Check whether the Flask application is running."""
+    """Return the current application status."""
 
-    # Return the application status as a JSON response.
+    # Send a success message in JSON format.
     return jsonify({
         "status": "success",
         "message": "GeneWeaver is running"
     })
 
 
-# --------------------------------------------------
+# ============================================================
 # 4. DNA ANALYSIS API
-# --------------------------------------------------
+# ============================================================
 
-# Accept POST requests containing a FASTA file and form data.
+# This route accepts a POST request from the frontend.
+# The request contains:
+# 1. A FASTA DNA file.
+# 2. A target DNA sequence.
+# 3. Maximum allowed mismatches.
+# 4. Scanning step size.
 @app.route("/api/analyze", methods=["POST"])
 def analyze():
-    """Read a FASTA file and scan for similar DNA sequences."""
+    """Read a FASTA file and search for target DNA matches."""
 
     try:
-        # Retrieve the uploaded FASTA file from the request.
+        # ====================================================
+        # 4.1 GET DATA FROM THE USER REQUEST
+        # ====================================================
+
+        # Get the uploaded FASTA file using its form field name.
         uploaded_file = request.files.get("fasta_file")
 
-        # Read the target DNA sequence, remove surrounding spaces,
-        # and convert all letters to uppercase.
+        # Get the target DNA sequence entered by the user.
+        # strip() removes extra spaces.
+        # upper() converts lowercase DNA letters to uppercase.
         target = request.form.get("target", "").strip().upper()
 
-        # Get the maximum allowed number of mismatches.
-        # Use 3 as the default value if the field is missing.
+        # Get the maximum number of mismatches allowed.
+        # If the user does not provide a value, use 3 by default.
         max_mismatches = int(
             request.form.get("max_mismatches", 3)
         )
 
         # Get the scanning step size.
-        # A step of 1 checks every possible starting position.
+        # Step = 1 means every possible position is checked.
         step = int(request.form.get("step", 1))
 
-        # ------------------------------------------
-        # 4.1 VALIDATE THE UPLOADED FILE
-        # ------------------------------------------
+        # ====================================================
+        # 4.2 VALIDATE THE UPLOADED FASTA FILE
+        # ====================================================
 
-        # Check whether the user selected a file.
+        # Check whether the user selected and uploaded a file.
         if uploaded_file is None or not uploaded_file.filename:
             return jsonify({
                 "error": "Please upload a FASTA file."
             }), 400
 
-        # Define the supported FASTA file extensions.
+        # Define the file extensions supported by the application.
         allowed_extensions = {".fa", ".fasta", ".fna"}
 
-        # Extract the uploaded file's extension.
+        # Extract the file extension and convert it to lowercase.
         extension = Path(uploaded_file.filename).suffix.lower()
 
-        # Reject files with unsupported extensions.
+        # Reject the file if it is not a supported FASTA format.
         if extension not in allowed_extensions:
             return jsonify({
                 "error": "Upload a .fa, .fasta, or .fna file."
             }), 400
 
-        # ------------------------------------------
-        # 4.2 VALIDATE THE TARGET DNA SEQUENCE
-        # ------------------------------------------
+        # ====================================================
+        # 4.3 VALIDATE THE TARGET DNA SEQUENCE
+        # ====================================================
 
-        # Ensure the user entered a target sequence.
+        # Check whether the user entered a target DNA sequence.
         if not target:
             return jsonify({
                 "error": "Enter a target DNA sequence."
             }), 400
 
-        # Clean the target sequence using the pipeline function.
+        # Clean the target DNA using the custom pipeline function.
+        # This helps standardize the sequence before analysis.
         target = clean_dna(target)
 
-        # Allow only A, C, G, and T in the target sequence.
-        # Reject empty sequences and sequences containing
-        # characters other than these four DNA bases.
+        # Check that the target contains only valid DNA bases.
+        # A -> Adenine
+        # C -> Cytosine
+        # G -> Guanine
+        # T -> Thymine
         if not target or set(target) - set("ACGT"):
             return jsonify({
                 "error": "The target must contain only A, C, G, and T."
             }), 400
 
-        # ------------------------------------------
-        # 4.3 VALIDATE SCANNING PARAMETERS
-        # ------------------------------------------
+        # ====================================================
+        # 4.4 VALIDATE SCANNING SETTINGS
+        # ====================================================
 
-        # The mismatch count cannot be negative or greater
-        # than the length of the target sequence.
+        # The mismatch value cannot be negative.
+        # It also cannot be greater than the target sequence length.
         if max_mismatches < 0 or max_mismatches > len(target):
             return jsonify({
                 "error": "Mismatch count must be between 0 and target length."
             }), 400
 
-        # The step size must be at least 1.
+        # The scanning step must be 1 or greater.
         if step < 1:
             return jsonify({
                 "error": "Step must be at least 1."
             }), 400
 
-        # ------------------------------------------
-        # 4.4 READ THE FASTA FILE
-        # ------------------------------------------
+        # ====================================================
+        # 4.5 READ AND CLEAN THE UPLOADED FASTA FILE
+        # ====================================================
 
-        # Read the uploaded file and decode it as UTF-8.
-        # utf-8-sig also removes a UTF-8 byte-order mark if present.
+        # Read the uploaded file and decode it into text.
+        # utf-8-sig also handles files containing a UTF-8
+        # byte-order mark (BOM).
         file_text = uploaded_file.read().decode("utf-8-sig")
 
-        # Create an empty list to store cleaned FASTA lines.
+        # Create an empty list to store valid FASTA lines.
         cleaned_lines = []
 
         # Process the uploaded file one line at a time.
         for line in file_text.splitlines():
 
-            # Remove spaces from the beginning and end.
+            # Remove unnecessary spaces from the line.
             line = line.strip()
 
-            # Ignore empty lines.
+            # Ignore blank lines in the uploaded file.
             if not line:
                 continue
 
-            # Ignore comment lines beginning with a semicolon.
+            # Ignore FASTA comment lines beginning with a semicolon.
             if line.startswith(";"):
                 continue
 
-            # Keep all other lines for FASTA parsing.
+            # Keep valid headers and DNA sequence lines.
             cleaned_lines.append(line)
 
-        # Combine the cleaned lines into one string.
+        # Combine all cleaned lines into one formatted text string.
         cleaned_text = "\n".join(cleaned_lines)
 
-        # ------------------------------------------
-        # 4.5 PARSE THE FASTA RECORDS
-        # ------------------------------------------
+        # ====================================================
+        # 4.6 PARSE FASTA DNA RECORDS
+        # ====================================================
 
-        # Convert the cleaned text into a file-like object.
-        # SeqIO.parse reads the DNA records in FASTA format.
+        # Convert the FASTA text into a file-like object.
+        # BioPython's SeqIO.parse() reads each FASTA record.
         records = list(
             SeqIO.parse(StringIO(cleaned_text), "fasta")
         )
 
-        # Check whether any FASTA records were detected.
+        # Check whether any valid FASTA records were found.
+        # FASTA records normally begin with a header using ">".
         if not records:
             return jsonify({
                 "error": (
@@ -200,39 +231,47 @@ def analyze():
                 )
             }), 400
 
-        # ------------------------------------------
-        # 4.6 PREPARE THE DNA SEQUENCES
-        # ------------------------------------------
+        # ====================================================
+        # 4.7 PREPARE DNA SEQUENCES FOR ANALYSIS
+        # ====================================================
 
-        # Create a list to store cleaned DNA records.
+        # Create an empty list to store cleaned DNA records.
         sequences = []
 
-        # Process each record obtained from the FASTA file.
+        # Process every DNA record from the FASTA file.
         for record in records:
 
-            # Convert the sequence to a string and clean it.
+            # Convert the BioPython sequence object to a string
+            # and clean the DNA sequence.
             sequence = clean_dna(str(record.seq))
 
-            # Add non-empty sequences to the scanning list.
+            # Add only valid, non-empty sequences to the list.
             if sequence:
                 sequences.append({
-                    "id": record.id,       # FASTA record identifier.
-                    "sequence": sequence   # Cleaned DNA sequence.
+                    # Store the FASTA sequence identifier.
+                    "id": record.id,
+
+                    # Store the cleaned DNA sequence.
+                    "sequence": sequence
                 })
 
-        # Check whether any usable DNA sequences remain.
+        # Check whether usable DNA sequences are available.
         if not sequences:
             return jsonify({
                 "error": "The FASTA file contains no usable sequences."
             }), 400
 
-        # ------------------------------------------
-        # 4.7 SCAN DNA SEQUENCES
-        # ------------------------------------------
+        # ====================================================
+        # 4.8 SCAN DNA SEQUENCES
+        # ====================================================
 
-        # Call the existing scoring module to find target matches.
-        # The function receives the sequences, target DNA,
-        # allowed mismatches, and scanning step.
+        # Call the scoring module to search for DNA sequences
+        # that match the target sequence.
+        #
+        # sequences      -> DNA sequences from the FASTA file.
+        # target         -> DNA pattern entered by the user.
+        # max_mismatches -> Maximum differences allowed.
+        # step           -> Number of positions to move after each scan.
         results = scan_sequences(
             sequences=sequences,
             target=target,
@@ -240,46 +279,52 @@ def analyze():
             step=step
         )
 
-        # ------------------------------------------
-        # 4.8 PREPARE RESULTS FOR THE FRONTEND
-        # ------------------------------------------
+        # ====================================================
+        # 4.9 PREPARE RESULTS FOR THE FRONTEND
+        # ====================================================
 
-        # Limit the number of results sent to the browser
-        # to avoid returning an excessively large response.
+        # Limit the results sent to the browser to 5000.
+        # This helps prevent very large API responses.
         displayed_results = results[:5000]
 
-        # Return the scan status, sequence count, total matches,
-        # displayed results, and a success message as JSON.
+        # Return the DNA analysis results in JSON format.
         return jsonify({
             "status": "success",
+
+            # Number of valid DNA sequences processed.
             "sequence_count": len(sequences),
+
+            # Total number of matches found.
             "results_count": len(results),
+
+            # Results displayed to the user.
             "results": displayed_results,
+
+            # Success message.
             "message": "DNA scan completed."
         })
 
-    # ----------------------------------------------
-    # 4.9 HANDLE EXPECTED INPUT ERRORS
-    # ----------------------------------------------
+    # ========================================================
+    # 4.10 HANDLE EXPECTED USER INPUT ERRORS
+    # ========================================================
 
-    # Handle invalid integer values or files that cannot
-    # be decoded using UTF-8.
+    # Handle invalid number input and file decoding problems.
     except (ValueError, UnicodeDecodeError) as error:
         return jsonify({
             "error": str(error)
         }), 400
 
-    # ----------------------------------------------
-    # 4.10 HANDLE UNEXPECTED ERRORS
-    # ----------------------------------------------
+    # ========================================================
+    # 4.11 HANDLE UNEXPECTED APPLICATION ERRORS
+    # ========================================================
 
     except Exception:
-        # Write the full exception traceback to the terminal
-        # or configured application logs for debugging.
+        # Save the complete error information in the terminal/log.
+        # This helps developers identify and fix problems.
         app.logger.exception("GeneWeaver analysis failed")
 
-        # Return a general error message to the frontend
-        # without exposing internal technical details.
+        # Send a safe error message to the user without exposing
+        # internal application details.
         return jsonify({
             "error": (
                 "Analysis failed. Check the terminal for "
@@ -288,26 +333,31 @@ def analyze():
         }), 500
 
 
-# --------------------------------------------------
-# 5. HANDLE FILES LARGER THAN 5 MB
-# --------------------------------------------------
+# ============================================================
+# 5. HANDLE FILES LARGER THAN THE ALLOWED SIZE
+# ============================================================
 
+# This function is automatically called when a request
+# exceeds the configured 5 MB size limit.
 @app.errorhandler(413)
 def file_too_large(error):
-    """Handle requests that exceed the configured size limit."""
+    """Return an error when the uploaded file is too large."""
 
-    # Return an error response when an uploaded file is too large.
+    # Send a clear error message to the frontend.
     return jsonify({
         "error": "File is too large. Maximum size is 5 MB."
     }), 413
 
 
-# --------------------------------------------------
-# 6. RUN THE FLASK APPLICATION
-# --------------------------------------------------
+# ============================================================
+# 6. START THE FLASK APPLICATION
+# ============================================================
 
-# Run the development server only when this file is executed directly.
+# Run the application only when this file is executed directly.
+# This prevents the development server from starting when
+# app.py is imported into another Python file.
 if __name__ == "__main__":
 
-    # Enable debug mode to help identify errors during development.
+    # Start the Flask development server.
+    # Debug mode helps display detailed errors during development.
     app.run(debug=True)
