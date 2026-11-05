@@ -1,0 +1,57 @@
+GeneWeaver is a web-based DNA sequence analysis project designed to process FASTA files and identify possible CRISPR target matches. The system accepts DNA sequence data, cleans and validates the sequences, converts them into a suitable format, and divides large sequences into overlapping chunks for analysis.
+The project is developed using Python, Flask, BioPython, NumPy, HTML, CSS, and Bootstrap. The application provides a simple web interface where users can upload FASTA files and perform DNA sequence analysis. The project is designed with a modular architecture and can be extended with GPU acceleration for faster processing of large genomic datasets.
+
+
+GeneWeaver/
+│
+├── app.py
+│   └── Main Flask application that handles routes,
+│       FASTA file uploads, and DNA analysis.
+│
+├── member1/
+│   ├── __init__.py
+│   └── fasta_pipeline.py
+│       └── Contains DNA processing functions such as
+│           clean_dna(), encode_dna(), and prepare_data().
+│
+├── data/
+│   ├── sample.fasta
+│   │   └── Contains sample DNA sequences for testing.
+│   │
+│   └── finaloutput.txt
+│       └── Stores sample or analysis output.
+│
+├── templates/
+│   └── index.html
+│       └── Main web page for uploading FASTA files
+│           and displaying analysis results.
+│
+├── static/
+│   ├── style.css
+│   │   └── Contains CSS styling for the web application.
+│   │
+│   └── images.jpg
+│       └── Application favicon or image resource.
+│
+├── test_pipeline.py
+│   └── Contains Pytest test cases for the DNA pipeline.
+│
+├── requirements.txt
+│   └── Contains the required Python libraries.
+│
+└── README.md
+    └── Contains project information and instructions.
+
+
+5. Technologies Used
+Technology	Purpose
+Python-Core programming language
+Flask-Web application framework
+BioPython-Reading and processing FASTA files
+NumPy-Numerical data processing
+HTML-Webpage structure
+CSS-Styling the application
+Bootstrap-Responsive user interface
+Pytest-Testing the DNA processing functions
+Git & GitHub-Version control and project management
+
